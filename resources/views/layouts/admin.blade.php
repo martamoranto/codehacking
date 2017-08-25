@@ -229,7 +229,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
+                    <h1 class="page-header"></h1>
                     @yield('content')
                 </div>
                 <!-- /.col-lg-12 -->
@@ -244,7 +244,7 @@
 <!-- /#wrapper -->
 
 <!-- jQuery -->
-<script src='js/jquery.js'></script>
+
 <script src="{{asset('js/libs.js')}}"></script>
 
 </body>
