@@ -3,7 +3,7 @@
 
 @section('content')
 	
-	<h1>Create Users</h1>
+	<h1>Add User</h1>
 	{!! Form::open(['method'=>'POST', 'action'=>'AdminUsersController@store', 'files' => true]) !!}
 		{{ csrf_field() }}
 		<div class="form-group">
