@@ -42,8 +42,13 @@ class AdminUsersController extends Controller
      */
     public function store(UserRequest $request)
     {
+        
+        if(trim($request->password) == ''){
+            $input = $request->except('password');
+        } else{
+            $input = $request->all();
+        }
 
-        $input = $request->all();
 
         if($file = $request->file('photo_id')){
                 $name = time() . $file->getClientOriginalName();
@@ -53,7 +58,7 @@ class AdminUsersController extends Controller
                 $input['photo_id'] = $photo->id;
         }
 
-        $input['password'] = bcrypt($request->password);
+    
         User::create($input);
         return redirect('/admin/users');
         // return $request->all();
@@ -91,18 +96,31 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserEditRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $this->validate($request, array(
+            'name' => 'required|min:3|max:50',
+            'email' => "required|email|unique:users,email,$id", 
+            'role_id' => 'required',
+            'is_active' => 'required',
+            'password_confirmation' => 'same:password',
+        ));
+
         $user = User::findOrFail($id);
-        $input = $request->all();
+        if(trim($request->password) == ''){
+            $input = $request->except('password');
+        } else{
+            $input = $request->all();
+        }
         
         if($file = $request->file('photo_id')){
-            $name = time() . getClientOriginalName();
-            $file = move('images', $name);
+            $name = time() . $file->getClientOriginalName();
+            $file->move('images', $name);
 
             $photo = Photo::create(['file'=>$name]);
             $input['photo_id'] = $photo->id;
         }
+
 
         $user->update($input);
         return redirect('admin/users');
